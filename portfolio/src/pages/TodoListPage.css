@@ -1,0 +1,291 @@
+.todolist-scope {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --bg-app: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --item-hover: #334155;
+  --trash-color: #f87171;
+  --trash-bg-hover: #451a1a;
+  --badge-bg: #1e293b;
+  --badge-border: #334155;
+  
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Light Theme Overrides inside .todolist-scope */
+.todolist-scope.light-theme {
+  --bg-app: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --item-hover: #f8fafc;
+  --trash-color: #ef4444;
+  --trash-bg-hover: #fee2e2;
+  --badge-bg: #f8fafc;
+  --badge-border: #e2e8f0;
+}
+
+.todolist-scope * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.todolist-scope .app-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Header */
+.todolist-scope .app-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.todolist-scope .app-title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--text-main);
+  letter-spacing: -0.05em;
+  margin-bottom: 10px;
+}
+
+.todolist-scope .app-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Layout Grid */
+.todolist-scope .app-layout {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Card Styling */
+.todolist-scope .todo-card {
+  background-color: var(--bg-card);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 550px;
+}
+
+.todolist-scope .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todolist-scope .card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.todolist-scope .theme-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-main);
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.todolist-scope .theme-toggle-btn:hover {
+  background-color: var(--item-hover);
+}
+
+/* Input Form */
+.todolist-scope .input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.todolist-scope .todo-input {
+  flex: 1;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.todolist-scope .todo-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.todolist-scope .add-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.todolist-scope .add-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Filters */
+.todolist-scope .filter-tabs {
+  display: flex;
+  background-color: var(--bg-app);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.todolist-scope .filter-tab {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.todolist-scope .filter-tab.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Todo List */
+.todolist-scope .todo-list-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.todolist-scope .empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.todolist-scope .todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todolist-scope .todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.todolist-scope .todo-item:hover {
+  background-color: var(--item-hover);
+}
+
+.todolist-scope .todo-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.todolist-scope .checkbox-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.todolist-scope .checkbox-circle.completed {
+  border-color: #10b981;
+  background-color: #10b981;
+  color: white;
+}
+
+.todolist-scope .todo-text {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.todolist-scope .todo-text.completed {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.todolist-scope .delete-btn {
+  background: none;
+  border: none;
+  color: var(--trash-color);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todolist-scope .delete-btn:hover {
+  background-color: var(--trash-bg-hover);
+}
+
+/* Footer / Progress */
+.todolist-scope .card-footer {
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+}
+
+.todolist-scope .progress-text {
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 600;
+}

@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-bg: #07090e;
+  --color-dark-card: #0e1322;
+  --color-dark-card-hover: #161e33;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-purple-glow: rgba(139, 92, 246, 0.15);
+  --color-accent-blue: #3b82f6;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-dark-bg);
+    color: #cbd5e1;
+    font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom glowing effects */
+.glow-border {
+  position: relative;
+}
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(45deg, var(--color-accent-purple), var(--color-accent-blue));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+.glow-border:hover::after {
+  opacity: 0.7;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 30%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #a78bfa 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07090e;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

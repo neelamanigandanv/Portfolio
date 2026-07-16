@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Sale Admin</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="login.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              light: '#60A5FA',
+              DEFAULT: '#3B82F6',
+              dark: '#1D4ED8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-[#1E40AF] via-[#3B82F6] to-[#60A5FA] min-h-screen flex items-center justify-center relative overflow-y-auto overflow-x-hidden p-4">
+
+  <!-- Background Decorative Concentric Circles -->
+  <div class="bg-circle-1 animate-pulse-subtle"></div>
+  <div class="bg-circle-2"></div>
+  <div class="bg-circle-3 animate-pulse-subtle"></div>
+
+  <!-- Register Card Container -->
+  <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-lg w-full relative z-10 my-8 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(30,64,175,0.3)]">
+    
+    <!-- Top Decorative Blob -->
+    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-0 pointer-events-none opacity-60"></div>
+
+    <div class="z-10 relative">
+      <!-- Header -->
+      <h2 class="text-3xl font-bold text-gray-800 tracking-tight mb-2">Create Account</h2>
+      <p class="text-gray-400 text-sm mb-8 leading-relaxed">
+        Join us and manage your sales metrics in one dashboard.
+      </p>
+
+      <!-- Form -->
+      <form id="registerForm" class="space-y-5" novalidate>
+        
+        <!-- Name Fields Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- First Name -->
+          <div class="line-input-container">
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" class="line-input text-gray-700 focus:placeholder-transparent" required>
+            <p id="firstNameError" class="text-red-500 text-xs mt-1 hidden"></p>
+          </div>
+          <!-- Last Name -->
+          <div class="line-input-container">
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="line-input text-gray-700 focus:placeholder-transparent" required>
+            <p id="lastNameError" class="text-red-500 text-xs mt-1 hidden"></p>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="line-input-container">
+          <input type="email" id="email" name="email" placeholder="Email Address" class="line-input text-gray-700 focus:placeholder-transparent" required>
+          <p id="emailError" class="text-red-500 text-xs mt-1 hidden"></p>
+        </div>
+
+        <!-- Password Field -->
+        <div class="line-input-container">
+          <div class="relative">
+            <input type="password" id="password" name="password" placeholder="Password" class="line-input pr-10 text-gray-700 focus:placeholder-transparent" required>
+            <button type="button" id="togglePassword" class="absolute right-0 bottom-2 text-gray-300 hover:text-blue-500 transition-colors focus:outline-none">
+              <i class="fa-regular fa-eye-slash text-sm"></i>
+            </button>
+          </div>
+          <p id="passwordError" class="text-red-500 text-xs mt-1 hidden"></p>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="line-input-container">
+          <div class="relative">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" class="line-input pr-10 text-gray-700 focus:placeholder-transparent" required>
+            <button type="button" id="toggleConfirmPassword" class="absolute right-0 bottom-2 text-gray-300 hover:text-blue-500 transition-colors focus:outline-none">
+              <i class="fa-regular fa-eye-slash text-sm"></i>
+            </button>
+          </div>
+          <p id="confirmPasswordError" class="text-red-500 text-xs mt-1 hidden"></p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 rounded-md  shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 active:scale-95 transition-all duration-200 flex items-center justify-center space-x-2">
+            <span id="btnText">Register</span>
+            <svg id="btnSpinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sign In Redirect Link -->
+        <div class="text-center text-xs text-gray-400 mt-4">
+          Already have an account? <a href="login.html" class="text-blue-500 font-semibold hover:underline">Sign In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform -translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+    <div id="toastIconContainer" class="p-1.5 rounded-lg text-white"></div>
+    <div>
+      <h4 id="toastTitle" class="font-bold text-sm leading-tight text-white"></h4>
+      <p id="toastMessage" class="text-xs text-slate-300"></p>
+    </div>
+  </div>
+
+  <!-- JS Logic Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const registerForm = document.getElementById('registerForm');
+      
+      const firstNameInput = document.getElementById('firstName');
+      const lastNameInput = document.getElementById('lastName');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      
+      const firstNameError = document.getElementById('firstNameError');
+      const lastNameError = document.getElementById('lastNameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      
+      const togglePassword = document.getElementById('togglePassword');
+      const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      
+      const toast = document.getElementById('toast');
+      const toastTitle = document.getElementById('toastTitle');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIconContainer = document.getElementById('toastIconContainer');
+
+      // Password visibility toggle helpers
+      const setupToggle = (button, input) => {
+        button.addEventListener('click', () => {
+          const isPassword = input.getAttribute('type') === 'password';
+          input.setAttribute('type', isPassword ? 'text' : 'password');
+          const icon = button.querySelector('i');
+          if (isPassword) {
+            icon.className = 'fa-regular fa-eye text-sm text-blue-500';
+          } else {
+            icon.className = 'fa-regular fa-eye-slash text-sm text-gray-300';
+          }
+        });
+      };
+      
+      setupToggle(togglePassword, passwordInput);
+      setupToggle(toggleConfirmPassword, confirmPasswordInput);
+
+      const validateEmail = (email) => {
+        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+      };
+
+      let toastTimeout;
+      const showToast = (type, title, message) => {
+        clearTimeout(toastTimeout);
+        if (type === 'success') {
+          toastIconContainer.className = 'p-1.5 rounded-lg text-white bg-green-500';
+          toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-base"></i>';
+        } else {
+          toastIconContainer.className = 'p-1.5 rounded-lg text-white bg-red-500';
+          toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-base"></i>';
+        }
+        toastTitle.textContent = title;
+        toastMessage.textContent = message;
+        toast.className = 'fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform transition-all duration-300 z-50 pointer-events-none animate-slide-down';
+        toastTimeout = setTimeout(() => {
+          toast.className = 'fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform -translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none';
+        }, 4000);
+      };
+
+      registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Reset Error UI
+        const fields = [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput];
+        const errors = [firstNameError, lastNameError, emailError, passwordError, confirmPasswordError];
+        errors.forEach(err => err.classList.add('hidden'));
+        fields.forEach(fld => fld.classList.remove('border-red-500'));
+
+        const fName = firstNameInput.value.trim();
+        const lName = lastNameInput.value.trim();
+        const emailVal = emailInput.value.trim();
+        const passwordVal = passwordInput.value;
+        const confirmVal = confirmPasswordInput.value;
+        
+        let isValid = true;
+
+        if (!fName) {
+          firstNameError.textContent = 'First name is required.';
+          firstNameError.classList.remove('hidden');
+          firstNameInput.classList.add('border-red-500');
+          isValid = false;
+        }
+
+        if (!lName) {
+          lastNameError.textContent = 'Last name is required.';
+          lastNameError.classList.remove('hidden');
+          lastNameInput.classList.add('border-red-500');
+          isValid = false;
+        }
+
+        if (!emailVal) {
+          emailError.textContent = 'Email address is required.';
+          emailError.classList.remove('hidden');
+          emailInput.classList.add('border-red-500');
+          isValid = false;
+        } else if (!validateEmail(emailVal)) {
+          emailError.textContent = 'Please enter a valid email address.';
+          emailError.classList.remove('hidden');
+          emailInput.classList.add('border-red-500');
+          isValid = false;
+        }
+
+        if (!passwordVal) {
+          passwordError.textContent = 'Password is required.';
+          passwordError.classList.remove('hidden');
+          passwordInput.classList.add('border-red-500');
+          isValid = false;
+        } else if (passwordVal.length < 6) {
+          passwordError.textContent = 'Password must be at least 6 characters.';
+          passwordError.classList.remove('hidden');
+          passwordInput.classList.add('border-red-500');
+          isValid = false;
+        }
+
+        if (!confirmVal) {
+          confirmPasswordError.textContent = 'Please confirm your password.';
+          confirmPasswordError.classList.remove('hidden');
+          confirmPasswordInput.classList.add('border-red-500');
+          isValid = false;
+        } else if (passwordVal !== confirmVal) {
+          confirmPasswordError.textContent = 'Passwords do not match.';
+          confirmPasswordError.classList.remove('hidden');
+          confirmPasswordInput.classList.add('border-red-500');
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Loading state
+        submitBtn.disabled = true;
+        btnText.textContent = 'Creating Account...';
+        btnSpinner.classList.remove('hidden');
+
+        setTimeout(() => {
+          // Store registered user in localStorage
+          localStorage.setItem('regEmail', emailVal);
+          localStorage.setItem('regPassword', passwordVal);
+          localStorage.setItem('regFirstName', fName);
+          
+          showToast('success', 'Registration Successful', 'Your account has been successfully created.');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1500);
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

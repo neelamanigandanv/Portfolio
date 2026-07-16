@@ -4,6 +4,8 @@ import { ExternalLink } from 'lucide-react';
 
 export default function ProjectCard({ project }) {
   const isTodo = project.id === 'todo';
+  const isTaskManager = project.id === 'task-manager';
+  const isRps = project.id === 'rps';
 
   const CardLink = ({ children }) => {
     if (isTodo) {
@@ -14,6 +16,30 @@ export default function ProjectCard({ project }) {
         >
           {children}
         </Link>
+      );
+    }
+    if (isTaskManager) {
+      return (
+        <a
+          href="/taskmgnt/login.html"
+          target="_blank"
+          rel="noreferrer"
+          className="bg-dark-card border border-white/5 rounded-2xl overflow-hidden cursor-pointer group hover:border-accent-purple/30 hover:shadow-[0_10px_30px_rgba(139,92,246,0.1)] transition-all duration-300 flex flex-col h-full"
+        >
+          {children}
+        </a>
+      );
+    }
+    if (isRps) {
+      return (
+        <a
+          href="/rockpaperscissor/index.html"
+          target="_blank"
+          rel="noreferrer"
+          className="bg-dark-card border border-white/5 rounded-2xl overflow-hidden cursor-pointer group hover:border-accent-purple/30 hover:shadow-[0_10px_30px_rgba(139,92,246,0.1)] transition-all duration-300 flex flex-col h-full"
+        >
+          {children}
+        </a>
       );
     }
     return (

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Sale Admin</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="login.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              light: '#60A5FA',
+              DEFAULT: '#3B82F6',
+              dark: '#1D4ED8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex items-center justify-center relative overflow-y-auto overflow-x-hidden">
+
+  <!-- Main Login Card Container -->
+  <div class="bg-white flex flex-col md:flex-row w-full min-h-screen relative z-10">
+    
+    <!-- Left Column: Branding & Illustration (hidden on mobile, shown on desktop) -->
+    <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-[#4F46E5] to-[#3B82F6] p-8 md:p-12 flex-col justify-between relative overflow-hidden select-none">
+      
+      <!-- Subtle internal decorative background wave -->
+      <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-100 300 C100 250, 150 380, 300 300 C450 220, 350 100, 500 50" stroke="white" stroke-width="20" stroke-linecap="round"/>
+          <path d="M-50 350 C150 300, 200 430, 350 350" stroke="white" stroke-width="10" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Top Section: Brand/Logo -->
+      <div class="flex items-center space-x-3 z-10">
+        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+          <!-- Sale Admin Logo -->
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12zm8.5-4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm4.5 5.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-3.5 3a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1z" opacity="0.3"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="white"/>
+          </svg>
+        </div>
+        <div class="leading-none">
+          <span class="text-white font-bold text-lg block tracking-wide">Sale</span>
+          <span class="text-blue-100 text-xs font-semibold uppercase tracking-wider">Admin</span>
+        </div>
+      </div>
+
+      <!-- Middle Section: Beautiful SVG Illustration -->
+      <div class="my-8 flex justify-center items-center z-10 ">
+        <svg class="w-64 h-64 md:w-72 md:h-72" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Desktop Monitor -->
+          <rect x="40" y="100" width="130" height="85" rx="8" fill="#FFFFFF" shadow="md"/>
+          <rect x="45" y="105" width="120" height="65" rx="4" fill="#F8FAFC"/>
+          <!-- Screen dashboard placeholders -->
+          <circle cx="60" cy="115" r="5" fill="#E2E8F0"/>
+          <line x1="72" y1="115" x2="110" y2="115" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
+          <line x1="53" y1="128" x2="83" y2="128" stroke="#3B82F6" stroke-width="6" stroke-linecap="round"/>
+          <line x1="53" y1="140" x2="120" y2="140" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
+          <line x1="53" y1="150" x2="100" y2="150" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
+          <!-- Monitor stand -->
+          <rect x="95" y="185" width="20" height="20" fill="#CBD5E1"/>
+          <ellipse cx="105" cy="205" rx="35" ry="8" fill="#94A3B8"/>
+          
+          <!-- Smartphone -->
+          <rect x="180" y="115" width="60" height="110" rx="10" fill="#1E293B" stroke="#64748B" stroke-width="3"/>
+          <rect x="185" y="125" width="50" height="90" rx="5" fill="#F1F5F9"/>
+          <!-- Shield on mobile -->
+          <path d="M210 150 C210 150, 225 145, 225 155 C225 175, 210 185, 210 185 C210 185, 195 175, 195 155 C195 145, 210 150, 210 150 Z" fill="#3B82F6"/>
+          <path d="M206 168 L209 171 L216 162" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="210" cy="120" r="2" fill="#475569"/>
+
+          <!-- Connecting network/chart line -->
+          <path d="M105 130 C125 120, 160 160, 190 145" stroke="#FBBF24" stroke-width="3" stroke-dasharray="4 4" stroke-linecap="round"/>
+          <circle cx="130" cy="128" r="4" fill="#FBBF24"/>
+          <circle cx="170" cy="153" r="4" fill="#FBBF24"/>
+
+          <!-- Floating yellow check pins -->
+          <circle cx="105" cy="130" r="5" fill="#FBBF24"/>
+
+          <!-- Character (Admin working) -->
+          <!-- Head -->
+          <circle cx="150" cy="165" r="10" fill="#FDE047"/>
+          <!-- Hair -->
+          <path d="M140 162 C140 152, 160 152, 160 162 Z" fill="#1E293B"/>
+          <!-- Torso / Body -->
+          <path d="M135 185 C135 178, 165 178, 165 185 L160 215 L140 215 Z" fill="#FBBF24"/>
+          <!-- Legs -->
+          <line x1="145" y1="215" x2="142" y2="255" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+          <line x1="155" y1="215" x2="158" y2="255" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+          <!-- Laptop -->
+          <path d="M125 200 L142 200 L140 205 L123 205 Z" fill="#E2E8F0"/>
+          <!-- Arms typing -->
+          <path d="M148 185 C140 190, 132 195, 134 200" stroke="#FBBF24" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Bottom Section: Decorative Shapes -->
+      <div class="flex justify-between items-center text-white/50 text-xs z-10">
+        <!-- Floating + and o shapes matching the mockup -->
+        <div class="flex space-x-2 text-yellow-300 opacity-80 animate-pulse-subtle">
+          <span>+</span>
+          <span>o</span>
+          <span>+</span>
+        </div>
+        <div class="flex space-x-2 text-blue-200 opacity-80 animate-float-reverse">
+          <span>o</span>
+          <span>+</span>
+          <span>o</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Sign In Form -->
+    <div class="w-full md:w-1/2 p-8 md:p-12 bg-white flex flex-col justify-between relative">
+      
+      <!-- Top Decorative Blobs -->
+      <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-0 pointer-events-none opacity-60"></div>
+      
+      <div class="z-10 my-auto">
+        <!-- Header -->
+        <h2 class="text-3xl font-bold text-gray-800 tracking-tight mb-2">Sign In</h2>
+        <p class="text-gray-400 text-sm mb-10 leading-relaxed">
+          Welcome! Please sign in to your dashboard to manage your sales.
+        </p>
+
+        <!-- Form -->
+        <form id="loginForm" class="space-y-6" novalidate>
+          <!-- Email Field -->
+          <div class="line-input-container">
+            <label for="email" class="line-input-label">Email</label>
+            <div class="relative">
+              <input type="email" id="email" name="email" placeholder="Enter email" class="line-input text-gray-700 focus:placeholder-transparent" required>
+            </div>
+            <p id="emailError" class="text-red-500 text-xs mt-1 hidden"></p>
+          </div>
+
+          <!-- Password Field -->
+          <div class="line-input-container">
+            <label for="password" class="line-input-label">Password</label>
+            <div class="relative">
+              <input type="password" id="password" name="password" placeholder="Enter password" class="line-input pr-10 text-gray-700 focus:placeholder-transparent" required>
+              <button type="button" id="togglePassword" class="absolute right-0 bottom-2 text-gray-300 hover:text-blue-500 transition-colors focus:outline-none">
+                <i class="fa-regular fa-eye-slash text-sm"></i>
+              </button>
+            </div>
+            <p id="passwordError" class="text-red-500 text-xs mt-1 hidden"></p>
+          </div>
+
+          <!-- Action Links & Submit -->
+          <div class="flex items-center justify-between pt-4">
+            <a href="#" id="forgotPassword" class="text-sm font-semibold text-blue-500 hover:text-blue-600 transition-colors">Forget Password?</a>
+            <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-md shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 active:scale-95 transition-all duration-200 flex items-center justify-center space-x-2 min-w-[130px]">
+              <span id="btnText">Sign In</span>
+              <svg id="btnSpinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer/Sign Up Option -->
+      <div class="text-center text-xs text-gray-400 mt-8 z-10">
+        Don't have an account? <a href="register.html" class="text-blue-500 font-semibold hover:underline">Register here</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform -translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+    <div id="toastIconContainer" class="p-1.5 rounded-lg text-white">
+      <!-- Icon inserted dynamically -->
+    </div>
+    <div>
+      <h4 id="toastTitle" class="font-bold text-sm leading-tight text-white"></h4>
+      <p id="toastMessage" class="text-xs text-slate-300"></p>
+    </div>
+  </div>
+
+  <!-- JS Logic Script -->
+  <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks - Sale Admin</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font Outfit -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Drag over column styling (Dark Beige / Sky Blue Drag) */
+    .drag-over {
+      background-color: #BCA483 !important;
+      border: 2px dashed #0B1528 !important;
+    }
+
+    /* Search highlight shadow pulse animation */
+    @keyframes searchHighlight {
+      0% {
+        box-shadow: 0 0 0 6px rgba(11, 21, 40, 0.4);
+        transform: scale(1.03);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(11, 21, 40, 0);
+        transform: scale(1.01);
+      }
+
+      100% {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        transform: scale(1);
+      }
+    }
+
+    .search-highlight-anim {
+      animation: searchHighlight 1s ease-out;
+    }
+
+    /* Hide placeholder text when focused or hovered */
+    input:focus::placeholder,
+    input:hover::placeholder {
+      color: transparent;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0B1528] min-h-screen flex flex-col text-gray-100">
+
+  <!-- Right/Main Content Container -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Top Header -->
+    <header class="h-20 bg-[#CBB598] border-b border-[#BCA483] px-8 flex items-center justify-between shrink-0">
+      <!-- Left Header: Unique Logo & Title -->
+      <div class="flex items-center space-x-3">
+        <!-- Unique Hexagonal Logo -->
+        <svg class="w-8 h-8 text-[#0B1528]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L20.66 7V17L12 22L3.34 17V7L12 2Z" stroke="currentColor" stroke-width="2.5"
+            stroke-linejoin="round" />
+          <path d="M12 8V16M8 12H16" stroke="#38271A" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+        <span class="text-xl font-extrabold text-[#0B1528] tracking-wider">Task Master</span>
+      </div>
+
+      <!-- Right Header: Actions & Profile -->
+      <div class="flex items-center space-x-4 relative">
+        <!-- Profile Avatar Button -->
+        <button id="profileMenuBtn" class="focus:outline-none" title="User Menu">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+            alt="Avatar"
+            class="w-10 h-10 rounded-full border-2 border-white ring-2 ring-[#FAF5EC] object-cover shadow-sm hover:scale-105 transition-transform">
+        </button>
+
+        <!-- User Dropdown Menu -->
+        <div id="profileDropdown"
+          class="origin-top-right absolute right-0 top-12 mt-2 w-48 rounded-sm shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50 text-[#0B1528]">
+          <div class="py-1">
+            <button id="logoutBtn"
+              class="flex items-center w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold text-red-600">
+              <i class="fa-solid fa-right-from-bracket mr-2"></i>Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content Area -->
+    <main class="flex-1 p-8 overflow-y-auto flex flex-col space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- Toolbar Row (Search, Filters, New Task Button) -->
+      <div
+        class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#CBB598] p-4 rounded-sm border border-[#BCA483] shadow-sm shrink-0">
+
+        <!-- Left Side: Tasks Title in bold -->
+        <h2 class="text-2xl font-black text-[#0B1528] tracking-tight pl-2">Tasks</h2>
+
+        <!-- Right: Actions (Search, Filters, New Task) -->
+        <div class="flex flex-col sm:flex-row flex-1 items-stretch sm:items-center justify-end gap-3 w-full max-w-2xl">
+
+          <!-- Search & Filters Container -->
+          <div class="flex flex-1 items-center space-x-3 max-w-md w-full">
+            <!-- Filter Dropdown Container -->
+            <div class="relative inline-block text-left shrink-0">
+              <button id="filterBtn"
+                class="flex items-center space-x-2 px-4 py-2.5 border border-[#DFD5C4] rounded-sm text-sm font-semibold text-[#0B1528] bg-[#FAF5EC] hover:bg-[#F2ECE0] transition-colors shadow-sm focus:outline-none">
+                <i class="fa-solid fa-sliders text-xs text-[#0B1528]"></i>
+                <span id="filterBtnLabel">Filters</span>
+              </button>
+
+              <!-- Dropdown Menu Options -->
+              <div id="filterDropdown"
+                class="origin-top-left absolute left-0 mt-2 w-48 rounded-lg  shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50">
+                <div class="py-1">
+                  <button
+                    class="filter-option-btn text-gray-700 block w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold"
+                    data-status="all">All Tasks</button>
+                  <button
+                    class="filter-option-btn text-gray-700 block w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold"
+                    data-status="not-started">Not Started</button>
+                  <button
+                    class="filter-option-btn text-gray-700 block w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold"
+                    data-status="in-progress">In Progress</button>
+                  <button
+                    class="filter-option-btn text-gray-700 block w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold"
+                    data-status="in-review">In Review</button>
+                  <button
+                    class="filter-option-btn text-gray-700 block w-full text-left px-4 py-2.5 text-sm hover:bg-slate-100 font-semibold"
+                    data-status="complete">Complete</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative flex-1">
+              <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-500 text-sm"></i>
+              <input type="text" id="searchInput" placeholder="Search..."
+                class="w-full pl-10 pr-4 py-2.5 bg-[#FAF5EC] border border-[#DFD5C4] rounded-sm text-sm placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#0B1528] transition-all text-[#0B1528]">
+            </div>
+          </div>
+
+          <!-- Call to Action Buttons -->
+          <div class="flex items-center shrink-0">
+            <button id="newTaskBtn"
+              class="bg-[#FAF5EC] hover:bg-[#87CEEB] text-[#0B1528] font-bold px-5 py-2.5 text-sm shadow-md border border-[#DFD5C4] active:scale-95 transition-all flex items-center space-x-2 w-full sm:w-auto justify-center">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>New Task</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kanban Board Columns Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start flex-1 min-h-[500px]">
+
+        <!-- Column 1: Not Started (Dark Beige) -->
+        <div class="flex flex-col bg-[#CBB598] p-4 rounded-sm border border-[#BCA483] min-h-[450px]"
+          data-status="not-started">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#38271A]"></span>
+              <span class="font-bold text-sm text-[#38271A] tracking-wider">Not Started</span>
+              <span id="count-not-started"
+                class="bg-white/80 text-[#38271A] text-xs px-2 py-0.5 rounded-full font-bold border border-[#BCA483]">0</span>
+            </div>
+            <button class="text-[#38271A]/70 hover:text-[#38271A] add-column-task-btn" data-status="not-started"
+              title="Add task to Not Started"><i class="fa-regular fa-square-plus text-lg"></i></button>
+          </div>
+          <div class="space-y-4 flex-1 drop-zone" id="col-not-started">
+            <!-- Cards populated by JS -->
+          </div>
+        </div>
+
+        <!-- Column 2: In Progress (Dark Beige) -->
+        <div class="flex flex-col bg-[#CBB598] p-4 rounded-sm border border-[#BCA483] min-h-[450px]"
+          data-status="in-progress">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#38271A]"></span>
+              <span class="font-bold text-sm text-[#38271A] tracking-wider">In Progress</span>
+              <span id="count-in-progress"
+                class="bg-white/80 text-[#38271A] text-xs px-2 py-0.5 rounded-full font-bold border border-[#BCA483]">0</span>
+            </div>
+            <button class="text-[#38271A]/70 hover:text-[#38271A] add-column-task-btn" data-status="in-progress"
+              title="Add task to In Progress"><i class="fa-regular fa-square-plus text-lg"></i></button>
+          </div>
+          <div class="space-y-4 flex-1 drop-zone" id="col-in-progress">
+            <!-- Cards populated by JS -->
+          </div>
+        </div>
+
+        <!-- Column 3: In Review (Dark Beige) -->
+        <div class="flex flex-col bg-[#CBB598] p-4 rounded-sm border border-[#BCA483] min-h-[450px]"
+          data-status="in-review">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#38271A]"></span>
+              <span class="font-bold text-sm text-[#38271A] tracking-wider">In Review</span>
+              <span id="count-in-review"
+                class="bg-white/80 text-[#38271A] text-xs px-2 py-0.5 rounded-full font-bold border border-[#BCA483]">0</span>
+            </div>
+            <button class="text-[#38271A]/70 hover:text-[#38271A] add-column-task-btn" data-status="in-review"
+              title="Add task to In Review"><i class="fa-regular fa-square-plus text-lg"></i></button>
+          </div>
+          <div class="space-y-4 flex-1 drop-zone" id="col-in-review">
+            <!-- Cards populated by JS -->
+          </div>
+        </div>
+
+        <!-- Column 4: Complete (Dark Beige) -->
+        <div class="flex flex-col bg-[#CBB598] p-4 rounded-sm border border-[#BCA483] min-h-[450px]"
+          data-status="complete">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#38271A]"></span>
+              <span class="font-bold text-sm text-[#38271A] tracking-wider">Complete</span>
+              <span id="count-complete"
+                class="bg-white/80 text-[#38271A] text-xs px-2 py-0.5 rounded-full font-bold border border-[#BCA483]">0</span>
+            </div>
+            <button class="text-[#38271A]/70 hover:text-[#38271A] add-column-task-btn" data-status="complete"
+              title="Add task to Complete"><i class="fa-regular fa-square-plus text-lg"></i></button>
+          </div>
+          <div class="space-y-4 flex-1 drop-zone" id="col-complete">
+            <!-- Cards populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- New Task Modal Dialog (Beige theme) -->
+  <div id="taskModal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div id="taskModalContent"
+      class="bg-[#CBB598] rounded-sm p-8 max-w-md w-full mx-4 shadow-2xl border border-[#BCA483] transform scale-95 transition-transform duration-300 text-[#0B1528] animate-fade-in">
+      <h3 class="text-2xl font-bold text-[#0B1528] mb-6">Create New Task</h3>
+      <form id="newTaskForm" class="space-y-5">
+
+        <!-- Task Title -->
+        <div>
+          <label for="taskTitle" class="block text-xs font-bold text-[#38271A] tracking-wider mb-2">Task Title</label>
+          <input type="text" id="taskTitle" required placeholder="e.g. Implement dashboard page"
+            class="w-full px-4 py-3 bg-[#FAF5EC] border border-[#DFD5C4] rounded-sm text-sm focus:outline-none focus:bg-white focus:border-[#0B1528] transition-colors text-[#0B1528] placeholder-slate-400">
+        </div>
+
+        <!-- Status Column Selector -->
+        <div>
+          <label for="taskStatus" class="block text-xs font-bold text-[#38271A] tracking-wider mb-2">Column
+            Status</label>
+          <select id="taskStatus"
+            class="w-full px-4 py-3 bg-[#FAF5EC] border border-[#DFD5C4] rounded-sm text-sm focus:outline-none focus:bg-white focus:border-[#0B1528] transition-colors text-[#0B1528]">
+            <option value="not-started">Not Started</option>
+            <option value="in-progress">In Progress</option>
+            <option value="in-review">In Review</option>
+            <option value="complete">Complete</option>
+          </select>
+        </div>
+
+        <!-- Tags Input -->
+        <div>
+          <label for="taskTags" class="block text-xs font-bold text-[#38271A] tracking-wider mb-2">Tags (comma
+            separated)</label>
+          <input type="text" id="taskTags" placeholder="e.g. Epic 1, UI, Backend"
+            class="w-full px-4 py-3 bg-[#FAF5EC] border border-[#DFD5C4] rounded-sm text-sm focus:outline-none focus:bg-white focus:border-[#0B1528] transition-colors text-[#0B1528] placeholder-slate-400">
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex items-center justify-end space-x-3 pt-4">
+          <button type="button" id="closeModalBtn"
+            class="px-5 py-2.5 border border-[#DFD5C4] rounded-sm text-sm font-semibold text-[#0B1528] bg-[#FAF5EC] hover:bg-[#F2ECE0] transition-colors">Cancel</button>
+          <button type="submit"
+            class="bg-[#FAF5EC] hover:bg-[#F2ECE0] text-[#0B1528] font-bold border border-[#DFD5C4] px-5 py-2.5 rounded-sm text-sm transition-all active:scale-95">Save
+            Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal (Beige theme with Welcome page color buttons) -->
+  <div id="deleteModal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div id="deleteModalContent"
+      class="bg-[#CBB598] rounded-sm p-8 max-w-sm w-full mx-4 shadow-2xl border border-[#BCA483] transform scale-95 transition-transform duration-300 text-[#0B1528]">
+      <h3 class="text-xl font-bold text-[#0B1528] mb-3">Delete Task</h3>
+      <p class="text-sm text-[#38271A] mb-6">Are you sure you want to delete this task? This action cannot be undone.</p>
+      <div class="flex items-center justify-end space-x-3">
+        <button type="button" id="closeDeleteModalBtn"
+          class="px-5 py-2.5 border border-[#DFD5C4] rounded-sm text-sm font-semibold text-[#0B1528] bg-[#FAF5EC] hover:bg-[#F2ECE0] transition-colors">Cancel</button>
+        <button type="button" id="confirmDeleteBtn"
+          class="bg-[#0B1528] hover:bg-[#14233c] text-white font-bold border border-[#0B1528] px-5 py-2.5 rounded-sm text-sm transition-all active:scale-95">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal (Beige theme with Welcome page color buttons, Centered) -->
+  <div id="logoutModal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+    <div id="logoutModalContent"
+      class="bg-[#CBB598] rounded-sm p-8 max-w-sm w-full mx-4 shadow-2xl border border-[#BCA483] transform scale-95 transition-transform duration-300 text-[#0B1528]">
+      <h3 class="text-xl font-bold text-[#0B1528] mb-3">Confirm Sign Out</h3>
+      <p class="text-sm text-[#38271A] mb-6">Are you sure you want to sign out of your session?</p>
+      <div class="flex items-center justify-end space-x-3">
+        <button type="button" id="closeLogoutModalBtn"
+          class="px-5 py-2.5 border border-[#DFD5C4] rounded-sm text-sm font-semibold text-[#0B1528] bg-[#FAF5EC] hover:bg-[#F2ECE0] transition-colors">Cancel</button>
+        <button type="button" id="confirmLogoutBtn"
+          class="bg-red-500  hover:bg-red-700 text-white font-bold border border-[#0B1528] px-5 py-2.5 rounded-sm text-sm transition-all active:scale-95">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Notification Toast -->
+  <div id="toast"
+    class="fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-sm shadow-xl flex items-center space-x-3 transform -translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+    <div id="toastIconContainer" class="p-1.5 rounded-sm text-white"></div>
+    <div>
+      <h4 id="toastTitle" class="font-bold text-sm leading-tight text-white"></h4>
+      <p id="toastMessage" class="text-xs text-slate-300"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Default Mock Data matching mockup (starts empty as requested)
+      const defaultTasks = [];
+
+      // Retrieve state or setup default
+      let tasks = JSON.parse(localStorage.getItem('boardTasks'));
+      if (tasks && tasks.some(t => t.id === '2456')) {
+        tasks = null;
+        localStorage.removeItem('boardTasks');
+      }
+      if (tasks === null) {
+        tasks = defaultTasks;
+      }
+
+      // DOM Elements
+      const searchInput = document.getElementById('searchInput');
+      const newTaskBtn = document.getElementById('newTaskBtn');
+      const taskModal = document.getElementById('taskModal');
+      const taskModalContent = document.getElementById('taskModalContent');
+      const newTaskForm = document.getElementById('newTaskForm');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const toast = document.getElementById('toast');
+      const toastTitle = document.getElementById('toastTitle');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIconContainer = document.getElementById('toastIconContainer');
+      const filterBtn = document.getElementById('filterBtn');
+      const filterDropdown = document.getElementById('filterDropdown');
+      const filterBtnLabel = document.getElementById('filterBtnLabel');
+
+      let activeFilter = 'all';
+
+      // Toast feedback helper
+      let toastTimeout;
+      const showToast = (type, title, message) => {
+        clearTimeout(toastTimeout);
+        if (type === 'success') {
+          toastIconContainer.className = 'p-1.5 rounded-lg text-white bg-green-500';
+          toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-base"></i>';
+        } else {
+          toastIconContainer.className = 'p-1.5 rounded-lg text-white bg-red-500';
+          toastIconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-base"></i>';
+        }
+        toastTitle.textContent = title;
+        toastMessage.textContent = message;
+        toast.className = 'fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform transition-all duration-300 z-50 pointer-events-none animate-slide-down';
+        toastTimeout = setTimeout(() => {
+          toast.className = 'fixed top-6 right-6 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform -translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none';
+        }, 4000);
+      };
+
+      // Save to localStorage
+      const saveState = () => {
+        localStorage.setItem('boardTasks', JSON.stringify(tasks));
+      };
+
+      // Render all Kanban tasks
+      const renderBoard = () => {
+        const query = searchInput.value.toLowerCase().trim();
+        const columns = {
+          'not-started': document.getElementById('col-not-started'),
+          'in-progress': document.getElementById('col-in-progress'),
+          'in-review': document.getElementById('col-in-review'),
+          'complete': document.getElementById('col-complete')
+        };
+
+        // Clear existing card items
+        Object.values(columns).forEach(col => col.innerHTML = '');
+
+        // Task Counter state
+        const counters = { 'not-started': 0, 'in-progress': 0, 'in-review': 0, 'complete': 0 };
+
+        // Copy and sort tasks so matches come first in the array (and thus top of column)
+        let displayTasks = [...tasks];
+        if (query) {
+          displayTasks.sort((a, b) => {
+            const aMatch = a.title.toLowerCase().includes(query) || a.id.includes(query) ? 1 : 0;
+            const bMatch = b.title.toLowerCase().includes(query) || b.id.includes(query) ? 1 : 0;
+            return bMatch - aMatch;
+          });
+        }
+
+        // Filter and place tasks
+        displayTasks.forEach(task => {
+          const matchesFilter = activeFilter === 'all' || task.status === activeFilter;
+          const matchesSearch = task.title.toLowerCase().includes(query) || task.id.includes(query);
+          if (!matchesSearch || !matchesFilter) return;
+
+          counters[task.status]++;
+
+          const card = document.createElement('div');
+          card.className = 'bg-[#FAF5EC] p-5 rounded-sm border border-[#DFD5C4] shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow select-none text-[#0B1528]';
+
+          // Apply shadow highlight animation if searched
+          if (query && (task.title.toLowerCase().includes(query) || task.id.includes(query))) {
+            card.classList.add('search-highlight-anim');
+          }
+
+          card.draggable = true;
+          card.dataset.id = task.id;
+
+          // Drag event listeners
+          card.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', task.id);
+            card.classList.add('opacity-40');
+          });
+
+          card.addEventListener('dragend', () => {
+            card.classList.remove('opacity-40');
+          });
+
+          // Tag elements mapping (Theme beige tags)
+          const tagsHTML = task.tags.map(t => `<span class="bg-[#CBB598] text-[#0B1528] border border-[#BCA483] text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wider">${t}</span>`).join(' ');
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" class="w-4 h-4 rounded-sm text-blue-600 accent-blue-600 border-[#DFD5C4] focus:ring-blue-500 bg-white task-checkbox" data-id="${task.id}" ${task.status === 'complete' ? 'checked' : ''}>
+                <span class="text-xs text-slate-400 font-semibold">#${task.id}</span>
+                <span class="text-xs text-slate-400">${task.date}</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button class="text-gray-400 hover:text-slate-700 edit-task-btn" data-id="${task.id}">
+                  <i class="fa-regular fa-pen-to-square text-xs"></i>
+                </button>
+                <button class="text-gray-400 hover:text-red-600 delete-single-btn" data-id="${task.id}">
+                  <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </div>
+            <p class="font-bold text-[#38271A] text-sm mb-4 leading-snug">${task.title}</p>
+            <div class="flex items-center justify-between">
+              <div class="flex space-x-1">${tagsHTML}</div>
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=50&q=80" alt="Assignee" class="w-6 h-6 rounded-full object-cover">
+            </div>
+          `;
+
+          // Checkbox toggle listener
+          card.querySelector('.task-checkbox').addEventListener('change', (e) => {
+            if (e.target.checked) {
+              task.checked = true;
+              task.status = 'complete';
+              showToast('success', 'Task Completed', `Task #${task.id} marked as complete.`);
+            } else {
+              task.checked = false;
+              task.status = 'not-started';
+            }
+            saveState();
+            renderBoard();
+          });
+
+          // Delete individual button
+          card.querySelector('.delete-single-btn').addEventListener('click', () => {
+            openDeleteModal(task.id);
+          });
+
+          // Edit / Rename button listener
+          card.querySelector('.edit-task-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.location.href = `edit-task.html?id=${task.id}`;
+          });
+
+          columns[task.status].appendChild(card);
+        });
+
+        // Update counts
+        Object.keys(counters).forEach(status => {
+          document.getElementById(`count-${status}`).textContent = counters[status];
+        });
+      };
+
+      // Set up drop zones
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        const column = zone.closest('[data-status]');
+
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          column.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', () => {
+          column.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          column.classList.remove('drag-over');
+          const taskId = e.dataTransfer.getData('text/plain');
+          const targetStatus = column.dataset.status;
+
+          const task = tasks.find(t => t.id === taskId);
+          if (task && task.status !== targetStatus) {
+            task.status = targetStatus;
+            saveState();
+            renderBoard();
+            showToast('success', 'Task Moved', `Moved task #${taskId} to ${column.querySelector('.tracking-wider').textContent}`);
+          }
+        });
+      });
+
+      // Filter Dropdown Toggler
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        filterDropdown.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', () => {
+        filterDropdown.classList.add('hidden');
+      });
+
+      document.querySelectorAll('.filter-option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeFilter = btn.dataset.status;
+          filterBtnLabel.textContent = btn.textContent;
+          renderBoard();
+        });
+      });
+
+      // Search field handler
+      searchInput.addEventListener('input', renderBoard);
+
+      const taskStatusSelect = document.getElementById('taskStatus');
+      const allStatusOptions = Array.from(taskStatusSelect.options).map(opt => ({
+        value: opt.value,
+        text: opt.textContent
+      }));
+
+      // Modal helper toggles
+      let deleteTaskId = null;
+      const deleteModal = document.getElementById('deleteModal');
+      const deleteModalContent = document.getElementById('deleteModalContent');
+      const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+      const logoutModal = document.getElementById('logoutModal');
+      const logoutModalContent = document.getElementById('logoutModalContent');
+      const closeLogoutModalBtn = document.getElementById('closeLogoutModalBtn');
+      const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+      const profileMenuBtn = document.getElementById('profileMenuBtn');
+      const profileDropdown = document.getElementById('profileDropdown');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // Profile menu dropdown toggle
+      profileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', () => {
+        profileDropdown.classList.add('hidden');
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        profileDropdown.classList.add('hidden');
+        openLogoutModal();
+      });
+
+      const openLogoutModal = () => {
+        logoutModal.classList.remove('hidden');
+        setTimeout(() => {
+          logoutModal.classList.remove('opacity-0');
+          logoutModalContent.classList.remove('scale-95');
+        }, 10);
+      };
+
+      const closeLogoutModal = () => {
+        logoutModal.classList.add('opacity-0');
+        logoutModalContent.classList.add('scale-95');
+        setTimeout(() => {
+          logoutModal.classList.add('hidden');
+        }, 300);
+      };
+
+      closeLogoutModalBtn.addEventListener('click', closeLogoutModal);
+      confirmLogoutBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+      });
+
+      const openDeleteModal = (taskId) => {
+        deleteTaskId = taskId;
+        deleteModal.classList.remove('hidden');
+        setTimeout(() => {
+          deleteModal.classList.remove('opacity-0');
+          deleteModalContent.classList.remove('scale-95');
+        }, 10);
+      };
+
+      const closeDeleteModal = () => {
+        deleteModal.classList.add('opacity-0');
+        deleteModalContent.classList.add('scale-95');
+        setTimeout(() => {
+          deleteModal.classList.add('hidden');
+          deleteTaskId = null;
+        }, 300);
+      };
+
+      closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+      confirmDeleteBtn.addEventListener('click', () => {
+        if (deleteTaskId !== null) {
+          tasks = tasks.filter(t => t.id !== deleteTaskId);
+          saveState();
+          renderBoard();
+          showToast('success', 'Task Deleted', `Successfully removed task #${deleteTaskId}`);
+          closeDeleteModal();
+        }
+      });
+
+      const openModal = (defaultStatus = 'all') => {
+        // Clear existing options
+        taskStatusSelect.innerHTML = '';
+
+        if (defaultStatus === 'all') {
+          // Add all status options
+          allStatusOptions.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.text;
+            taskStatusSelect.appendChild(option);
+          });
+          taskStatusSelect.value = 'not-started';
+        } else {
+          // Add only the target status option
+          const opt = allStatusOptions.find(o => o.value === defaultStatus);
+          if (opt) {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.text;
+            taskStatusSelect.appendChild(option);
+          }
+          taskStatusSelect.value = defaultStatus;
+        }
+
+        taskModal.classList.remove('hidden');
+        setTimeout(() => {
+          taskModal.classList.remove('opacity-0');
+          taskModalContent.classList.remove('scale-95');
+        }, 10);
+      };
+
+      const closeModal = () => {
+        taskModal.classList.add('opacity-0');
+        taskModalContent.classList.add('scale-95');
+        setTimeout(() => {
+          taskModal.classList.add('hidden');
+          newTaskForm.reset();
+        }, 300);
+      };
+
+      newTaskBtn.addEventListener('click', () => openModal('all'));
+      closeModalBtn.addEventListener('click', closeModal);
+
+      // Column Quick-Add Buttons
+      document.querySelectorAll('.add-column-task-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const status = btn.dataset.status;
+          openModal(status);
+        });
+      });
+
+      // Modal Form Submit (Create Task)
+      newTaskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('taskTitle').value.trim();
+        const status = document.getElementById('taskStatus').value;
+        const tagsInput = document.getElementById('taskTags').value;
+
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : ['Task'];
+        const randomId = Math.floor(2000 + Math.random() * 8000).toString();
+        const formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        const newTask = {
+          id: randomId,
+          title,
+          date: formattedDate,
+          status,
+          tags,
+          checked: false
+        };
+
+        tasks.push(newTask);
+        saveState();
+        closeModal();
+        renderBoard();
+        showToast('success', 'Task Created', `Task #${randomId} added to board successfully.`);
+      });
+
+      // Automatically remove placeholder when cursor is on the input box (focus or hover)
+      document.querySelectorAll('input[placeholder]').forEach(input => {
+        const originalPlaceholder = input.getAttribute('placeholder');
+
+        input.addEventListener('focus', () => {
+          input.setAttribute('placeholder', '');
+        });
+
+        input.addEventListener('blur', () => {
+          input.setAttribute('placeholder', originalPlaceholder);
+        });
+
+        input.addEventListener('mouseenter', () => {
+          input.setAttribute('placeholder', '');
+        });
+
+        input.addEventListener('mouseleave', () => {
+          if (document.activeElement !== input) {
+            input.setAttribute('placeholder', originalPlaceholder);
+          }
+        });
+      });
+
+      // Render initial board
+      renderBoard();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Weather</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css?v=2026071512">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Weather Card Container -->
+        <main class="weather-card">
+            <!-- Header Section -->
+            <header class="card-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <!-- Sun behind cloud dynamic SVG icon -->
+                        <svg class="header-logo" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="4" fill="#FFC107" stroke="#FFB300"/>
+                        </svg>
+                    </div>
+                    <h1>Simple Weather</h1>
+                </div>
+                <!-- Search bar in top right corner -->
+                <div class="location-search-wrapper">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="city-search" class="location-search-input" value="Hyderabad, IN" placeholder="Search City..." autocomplete="off">
+                    <div id="suggestions-list" class="suggestions-list"></div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <div class="card-body" id="weather-content">
+                <!-- Location & Date -->
+                <div class="location-container">
+                    <h2 class="location-title" id="location-title">
+                        <i data-lucide="map-pin" class="pin-icon"></i>
+                        <span id="location-title-val">Hyderabad, IN</span>
+                    </h2>
+                    <div class="date-time" id="current-date-time">26 May 2025 | 10:30 AM</div>
+                </div>
+
+                <!-- Primary Weather Info -->
+                <div class="weather-primary">
+                    <div class="weather-icon-large" id="weather-icon-container">
+                        <!-- Dynamic SVG inserted here -->
+                    </div>
+                    <div class="temperature-container">
+                        <span id="temperature-val">32</span><span class="temp-unit">°C</span>
+                    </div>
+                    <div class="weather-description" id="weather-desc">Partly Cloudy</div>
+                </div>
+
+                <!-- Detailed Metrics Grid -->
+                <div class="metrics-grid">
+                    <!-- Humidity -->
+                    <div class="metric-item">
+                        <div class="metric-icon humidity">
+                            <i data-lucide="droplet"></i>
+                        </div>
+                        <span class="metric-label">Humidity</span>
+                        <span class="metric-value" id="humidity-val">58%</span>
+                    </div>
+
+                    <!-- Wind -->
+                    <div class="metric-item">
+                        <div class="metric-icon wind">
+                            <i data-lucide="wind"></i>
+                        </div>
+                        <span class="metric-label">Wind</span>
+                        <span class="metric-value" id="wind-val">14 km/h</span>
+                    </div>
+
+                    <!-- Visibility -->
+                    <div class="metric-item">
+                        <div class="metric-icon visibility">
+                            <i data-lucide="eye"></i>
+                        </div>
+                        <span class="metric-label">Visibility</span>
+                        <span class="metric-value" id="visibility-val">10 km</span>
+                    </div>
+
+                    <!-- Updated At -->
+                    <div class="metric-item">
+                        <div class="metric-icon updated">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <span class="metric-label">Updated At</span>
+                        <span class="metric-value" id="updated-val">10:30 AM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loader Overlay -->
+            <div class="loader-overlay" id="loader">
+                <div class="spinner"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js?v=2026071512"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Background Concentric Circles */
+.bg-circle-1 {
+  width: 600px;
+  height: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 25%;
+  position: absolute;
+  top: -200px;
+  left: -200px;
+  pointer-events: none;
+}
+
+.bg-circle-2 {
+  width: 900px;
+  height: 900px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 25%;
+  position: absolute;
+  top: -350px;
+  left: -350px;
+  pointer-events: none;
+}
+
+.bg-circle-3 {
+  width: 1200px;
+  height: 1200px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  border-radius: 25%;
+  position: absolute;
+  top: -500px;
+  left: -500px;
+  pointer-events: none;
+}
+
+/* Floating Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-8deg);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 4s ease-in-out infinite;
+}
+
+/* Custom Line Inputs */
+.line-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #E2E8F0; /* border-gray-200 */
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+  width: 100%;
+  caret-color: #3B82F6; /* Custom blinking cursor/caret color */
+}
+
+.line-input:focus {
+  outline: none;
+  border-color: #3B82F6; /* border-blue-500 */
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.05);
+}
+
+.line-input-label {
+  color: #64748B; /* text-gray-500 */
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.line-input-container:focus-within .line-input-label {
+  color: #3B82F6; /* text-blue-500 */
+}
+
+/* Toast animations */
+@keyframes slideInDown {
+  0% {
+    transform: translateY(-100%) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slideInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -33,7 +33,9 @@ export default function App() {
 
   const handleDownloadResume = () => {
     const link = document.createElement('a');
-    link.href = '/Neelamanigandan_Resume.pdf';
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    link.href = `${cleanBase}Neelamanigandan_Resume.pdf`;
     link.download = 'Neelamanigandan_Resume.pdf';
     document.body.appendChild(link);
     link.click();

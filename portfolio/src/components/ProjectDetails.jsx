@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Code, CheckCircle2, Zap } from 'lucide-react';
 import { projectsData } from '../data/projects';
@@ -6,6 +6,7 @@ import { projectsData } from '../data/projects';
 export default function ProjectDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   
   const project = projectsData.find((p) => p.id === id);
 
@@ -22,6 +23,18 @@ export default function ProjectDetails() {
       </div>
     );
   }
+
+  const getCorrectUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    if (url === '/todolist') {
+      return `${cleanBase}#/todolist`;
+    }
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    return `${cleanBase}${cleanUrl}`;
+  };
 
   return (
     <div className="min-h-screen bg-dark-bg text-slate-300 py-12 px-4 sm:px-6 lg:px-8">
@@ -55,15 +68,13 @@ export default function ProjectDetails() {
 
           <div className="flex gap-4">
             {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 py-2.5 bg-accent-purple text-white text-sm font-semibold rounded-xl shadow-lg hover:bg-accent-purple/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+              <button
+                onClick={() => setShowConfirmModal(true)}
+                className="px-5 py-2.5 bg-accent-purple text-white text-sm font-semibold rounded-xl shadow-lg hover:bg-accent-purple/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer"
               >
                 <span>Live Demo</span>
                 <ExternalLink className="w-4 h-4" />
-              </a>
+              </button>
             )}
             {project.codeUrl && (
               <a
@@ -231,6 +242,45 @@ export default function ProjectDetails() {
           </div>
         </div>
       </div>
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
+          <div className="bg-dark-card border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-6 transform scale-100 transition-transform">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-full bg-accent-purple/10 text-accent-purple">
+                <Zap className="w-6.5 h-6.5 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg leading-tight">
+                  Launch {project.title}?
+                </h3>
+                <p className="text-slate-400 text-xs mt-1">
+                  Would you like to open the live interactive application in a new window?
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3 justify-end pt-2">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 text-xs font-semibold rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <a
+                href={getCorrectUrl(project.liveUrl)}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 text-xs font-semibold rounded-lg bg-accent-purple text-white hover:bg-accent-purple/90 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>Go to live application</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
